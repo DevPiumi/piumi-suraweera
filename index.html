@@ -1,0 +1,1392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Piumi Suraweera — Senior Software Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --surface2: #181825;
+    --accent: #7DF9C2;
+    --accent2: #4fa8e0;
+    --text: #e8e8f0;
+    --muted: #6e6e8a;
+    --border: rgba(255,255,255,0.07);
+    --glow: rgba(125, 249, 194, 0.15);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* NOISE TEXTURE */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  /* BACKGROUND GLOW ORBS */
+  .bg-orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .bg-orb-1 {
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(125,249,194,0.06) 0%, transparent 70%);
+    top: -200px; right: -100px;
+  }
+  .bg-orb-2 {
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(79,168,224,0.05) 0%, transparent 70%);
+    bottom: 200px; left: -150px;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 1.2rem 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(10,10,15,0.8);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    color: var(--accent);
+    letter-spacing: 0.02em;
+  }
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+  .nav-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  /* SECTIONS */
+  section {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2.5rem;
+  }
+
+  /* HERO */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 100%;
+    padding: 8rem 6rem 4rem;
+  }
+  .hero-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.2s;
+  }
+  .hero-name {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3.5rem, 8vw, 7rem);
+    font-weight: 900;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.4s;
+  }
+  .hero-name span {
+    display: block;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-title {
+    font-size: 1.1rem;
+    color: var(--muted);
+    max-width: 560px;
+    line-height: 1.8;
+    margin-bottom: 3rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.6s;
+  }
+  .hero-cta {
+    display: flex;
+    gap: 1.2rem;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.8s;
+  }
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: var(--accent);
+    color: #0a0a0f;
+    padding: 0.85rem 2rem;
+    border-radius: 3px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+  .btn-primary:hover {
+    background: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(125,249,194,0.25);
+  }
+  .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.85rem 2rem;
+    border-radius: 3px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+  .btn-outline:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  /* HERO STATS */
+  .hero-stats {
+    position: absolute;
+    right: 6rem;
+    bottom: 6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    opacity: 0;
+    animation: fadeLeft 0.8s ease forwards 1s;
+  }
+  .stat {
+    text-align: right;
+  }
+  .stat-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 0.3rem;
+  }
+
+  /* DIVIDER */
+  .section-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 0 2.5rem;
+  }
+
+  /* SECTION HEADERS */
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1.5rem;
+    margin-bottom: 4rem;
+    padding-top: 6rem;
+  }
+  .section-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ABOUT */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+  .about-text p {
+    color: var(--muted);
+    margin-bottom: 1.2rem;
+    font-size: 0.98rem;
+  }
+  .about-text p strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+  .about-contact {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.2rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    transition: all 0.3s;
+    text-decoration: none;
+    color: var(--text);
+  }
+  .contact-item:hover {
+    border-color: var(--accent);
+    transform: translateX(4px);
+    background: var(--surface2);
+  }
+  .contact-icon {
+    width: 36px; height: 36px;
+    background: var(--surface2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+  }
+  .contact-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 0.1rem;
+  }
+  .contact-value {
+    font-size: 0.88rem;
+    color: var(--text);
+  }
+
+  /* SKILLS */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.2rem;
+    margin-bottom: 4rem;
+  }
+  .skill-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.5rem 1.8rem;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .skill-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+  .skill-card:hover {
+    border-color: rgba(125,249,194,0.2);
+    transform: translateY(-3px);
+  }
+  .skill-card:hover::before { transform: scaleX(1); }
+  .skill-cat {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.8rem;
+  }
+  .skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .skill-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 0.3rem 0.7rem;
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+  .skill-tag:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+  .skill-tag.expert {
+    color: var(--accent);
+    border-color: rgba(125,249,194,0.3);
+    background: rgba(125,249,194,0.05);
+  }
+
+  /* EXPERIENCE */
+  .timeline {
+    position: relative;
+    padding-left: 2rem;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 8px; bottom: 0;
+    width: 1px;
+    background: linear-gradient(180deg, var(--accent), transparent);
+  }
+  .timeline-item {
+    position: relative;
+    padding-bottom: 3.5rem;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.6s ease;
+  }
+  .timeline-item.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .timeline-dot {
+    position: absolute;
+    left: -2.4rem;
+    top: 6px;
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 12px var(--accent);
+  }
+  .timeline-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .timeline-company {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .timeline-date {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+  .timeline-role {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    letter-spacing: -0.01em;
+  }
+  .timeline-points {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .timeline-points li {
+    font-size: 0.9rem;
+    color: var(--muted);
+    padding-left: 1.2rem;
+    position: relative;
+    line-height: 1.65;
+  }
+  .timeline-points li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    opacity: 0.6;
+    font-size: 0.8rem;
+  }
+
+  /* PROJECTS */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  .project-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2rem 2.2rem;
+    transition: all 0.35s;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease, border-color 0.3s, box-shadow 0.3s;
+  }
+  .project-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .project-card:hover {
+    border-color: rgba(125,249,194,0.25);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3), 0 0 30px rgba(125,249,194,0.05);
+  }
+  .project-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 120px; height: 120px;
+    background: radial-gradient(circle at bottom right, rgba(125,249,194,0.05), transparent 70%);
+    pointer-events: none;
+  }
+  .project-type {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 0.8rem;
+  }
+  .project-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+    line-height: 1.3;
+  }
+  .project-desc {
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 1.2rem;
+  }
+  .project-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .stack-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    padding: 0.25rem 0.6rem;
+    background: rgba(125,249,194,0.08);
+    border: 1px solid rgba(125,249,194,0.2);
+    border-radius: 2px;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+
+  /* EDUCATION */
+  .edu-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    margin-bottom: 4rem;
+  }
+  .edu-card {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 2rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.8rem 2rem;
+    transition: all 0.3s;
+    align-items: start;
+  }
+  .edu-card:hover {
+    border-color: rgba(125,249,194,0.2);
+    transform: translateX(4px);
+  }
+  .edu-year {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+    padding-top: 0.3rem;
+  }
+  .edu-degree {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+  }
+  .edu-school {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent2);
+    letter-spacing: 0.08em;
+    margin-bottom: 0.6rem;
+  }
+  .edu-note {
+    font-size: 0.85rem;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  /* FLOATING CV BUTTON */
+  .float-cv {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    background: var(--accent);
+    color: #0a0a0f;
+    padding: 0.85rem 1.5rem;
+    border-radius: 50px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    box-shadow: 0 8px 30px rgba(125,249,194,0.35);
+    transition: all 0.3s;
+    animation: floatIn 0.6s ease forwards 1.5s;
+    opacity: 0;
+  }
+  .float-cv:hover {
+    background: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 14px 40px rgba(125,249,194,0.45);
+  }
+  .float-cv .dl-icon {
+    font-size: 1rem;
+    animation: bounce 2s ease-in-out infinite;
+    display: inline-block;
+  }
+  @keyframes floatIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+  }
+  .btn-download {
+    border-color: rgba(125,249,194,0.3) !important;
+    color: var(--accent) !important;
+  }
+  .btn-download:hover {
+    background: rgba(125,249,194,0.08) !important;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 3rem 6rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+    margin-top: 4rem;
+  }
+  .footer-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--muted);
+  }
+  .footer-note {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .footer-links {
+    display: flex;
+    gap: 1.5rem;
+  }
+  .footer-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+  .footer-links a:hover { color: var(--accent); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeLeft {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  /* SCROLL INDICATOR */
+  .scroll-indicator {
+    position: absolute;
+    bottom: 3rem;
+    left: 6rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 1.2s;
+  }
+  .scroll-line {
+    width: 40px;
+    height: 1px;
+    background: var(--muted);
+    position: relative;
+    overflow: hidden;
+  }
+  .scroll-line::after {
+    content: '';
+    position: absolute;
+    left: -100%;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background: var(--accent);
+    animation: scrollLine 2s ease-in-out infinite;
+  }
+  @keyframes scrollLine {
+    0% { left: -100%; }
+    50% { left: 100%; }
+    100% { left: 100%; }
+  }
+  .scroll-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* VOLUNTEERING */
+  .vol-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.3rem;
+    margin-bottom: 4rem;
+  }
+  .vol-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.8rem 2rem;
+    transition: all 0.35s;
+  }
+  .vol-card:hover {
+    border-color: rgba(125,249,194,0.25);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+  }
+  .vol-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .vol-icon {
+    width: 42px; height: 42px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+  .vol-org {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 0.2rem;
+  }
+  .vol-role {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .vol-date {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--muted);
+    margin-top: 0.2rem;
+  }
+  .vol-desc {
+    font-size: 0.87rem;
+    color: var(--muted);
+    line-height: 1.65;
+    margin-bottom: 1rem;
+  }
+  .vol-highlights {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .vol-highlight {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 0.03em;
+  }
+
+  @media (max-width: 768px) {
+    #hero { padding: 7rem 2rem 10rem; }
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .hero-stats { position: static; margin-top: 3rem; flex-direction: row; opacity: 1; animation: none; }
+    .stat { text-align: left; }
+    .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .projects-grid { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 1.5rem; text-align: center; padding: 2rem; }
+    .hero-stats { position: static; }
+    .scroll-indicator { left: 2rem; }
+  }
+
+  /* LANG PILLS */
+  .lang-row {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 4rem;
+  }
+  .lang-pill {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.8rem 1.4rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 30px;
+    transition: all 0.3s;
+  }
+  .lang-pill:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+  .lang-name {
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  .lang-level {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-orb bg-orb-1"></div>
+<div class="bg-orb bg-orb-2"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">PS</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#volunteering">Volunteering</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div style="position:relative; overflow:hidden;">
+<section id="hero">
+  <div class="hero-tag">📍 Stockholm, Sweden — Open to opportunities</div>
+  <h1 class="hero-name">
+    Piumi<br>
+    <span>Suraweera</span>
+  </h1>
+  <p class="hero-title">
+    Senior Software Engineer with 5+ years building scalable backend systems. 
+    Specialising in <strong style="color:var(--accent)">Java & Spring Boot</strong>, 
+    cloud-native architecture, and AI-powered applications.
+  </p>
+  <div class="hero-cta">
+    <a href="mailto:sapiumisuraweera@gmail.com" class="btn-primary">
+      ✉ Get in touch
+    </a>
+    <a href="https://linkedin.com/in/piumi-suraweera" target="_blank" class="btn-outline">
+      ↗ LinkedIn
+    </a>
+    <a href="Piumi_Suraweera_CV.docx" download="Piumi_Suraweera_CV.docx" class="btn-outline btn-download">
+      ↓ Download CV
+    </a>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-number">5+</div>
+      <div class="stat-label">Years Experience</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">3</div>
+      <div class="stat-label">Continents Served</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">MSc</div>
+      <div class="stat-label">Stockholm University</div>
+    </div>
+  </div>
+
+  <div class="scroll-indicator">
+    <div class="scroll-line"></div>
+    <span class="scroll-text">Scroll to explore</span>
+  </div>
+</section>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2 class="section-title">About</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="about-grid">
+    <div class="about-text">
+      <p>Results-driven engineer with a passion for building <strong>enterprise-grade backend systems</strong> that are scalable, maintainable, and elegant. My work spans telecommunications, eCommerce, and AI-driven domains across Asia, Europe, America, and Africa.</p>
+      <p>Based in Stockholm following my <strong>MSc at Stockholm University</strong>, I bring deep expertise in Java & Spring Boot, cloud migration, microservices architecture, and message-driven systems.</p>
+      <p>Beyond code, I care about <strong>mentorship, engineering culture, and continuous learning</strong> — contributing to communities like Women in Tech Stockholm.</p>
+      <p>I'm actively looking for backend engineering opportunities in Sweden where I can make a real impact.</p>
+    </div>
+    <div class="about-contact">
+      <a class="contact-item" href="mailto:sapiumisuraweera@gmail.com">
+        <div class="contact-icon">✉</div>
+        <div>
+          <span class="contact-label">Email</span>
+          <span class="contact-value">sapiumisuraweera@gmail.com</span>
+        </div>
+      </a>
+      <a class="contact-item" href="tel:+46734852210">
+        <div class="contact-icon">☎</div>
+        <div>
+          <span class="contact-label">Phone</span>
+          <span class="contact-value">+46 73 485 2210</span>
+        </div>
+      </a>
+      <a class="contact-item" href="https://linkedin.com/in/piumi-suraweera" target="_blank">
+        <div class="contact-icon">in</div>
+        <div>
+          <span class="contact-label">LinkedIn</span>
+          <span class="contact-value">linkedin.com/in/piumi-suraweera</span>
+        </div>
+      </a>
+      <div class="contact-item">
+        <div class="contact-icon">📍</div>
+        <div>
+          <span class="contact-label">Location</span>
+          <span class="contact-value">Stockholm, Sweden</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Technical Skills</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="skills-grid">
+    <div class="skill-card">
+      <div class="skill-cat">Languages</div>
+      <div class="skill-tags">
+        <span class="skill-tag expert">Java ★ Expert</span>
+        <span class="skill-tag">Python</span>
+        <span class="skill-tag">JavaScript</span>
+        <span class="skill-tag">SQL</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-cat">Frameworks</div>
+      <div class="skill-tags">
+        <span class="skill-tag expert">Spring Boot</span>
+        <span class="skill-tag expert">Spring Framework</span>
+        <span class="skill-tag">Spring Security</span>
+        <span class="skill-tag">Hibernate / JPA</span>
+        <span class="skill-tag">Flask</span>
+        <span class="skill-tag">React.js</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-cat">Cloud & DevOps</div>
+      <div class="skill-tags">
+        <span class="skill-tag expert">Docker</span>
+        <span class="skill-tag expert">Kubernetes</span>
+        <span class="skill-tag">AWS</span>
+        <span class="skill-tag">GCP</span>
+        <span class="skill-tag">Azure</span>
+        <span class="skill-tag">Jenkins</span>
+        <span class="skill-tag">Git</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-cat">Databases</div>
+      <div class="skill-tags">
+        <span class="skill-tag expert">PostgreSQL</span>
+        <span class="skill-tag">MySQL</span>
+        <span class="skill-tag">MongoDB</span>
+        <span class="skill-tag">Redis</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-cat">APIs & Messaging</div>
+      <div class="skill-tags">
+        <span class="skill-tag expert">RESTful APIs</span>
+        <span class="skill-tag">GraphQL</span>
+        <span class="skill-tag">Kafka</span>
+        <span class="skill-tag">RabbitMQ</span>
+        <span class="skill-tag">JSON / XML</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-cat">AI / ML</div>
+      <div class="skill-tags">
+        <span class="skill-tag expert">OpenAI API</span>
+        <span class="skill-tag expert">LangChain</span>
+        <span class="skill-tag">GPT-4</span>
+        <span class="skill-tag">Applied NLP</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-cat">Architecture</div>
+      <div class="skill-tags">
+        <span class="skill-tag expert">Microservices</span>
+        <span class="skill-tag">Event-Driven</span>
+        <span class="skill-tag">SOLID Principles</span>
+        <span class="skill-tag">Design Patterns</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-cat">Testing & Security</div>
+      <div class="skill-tags">
+        <span class="skill-tag">JUnit</span>
+        <span class="skill-tag">Mockito</span>
+        <span class="skill-tag">OAuth2</span>
+        <span class="skill-tag">JWT</span>
+        <span class="skill-tag">Spring Security</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Experience</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="timeline">
+
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-meta">
+        <span class="timeline-company">Yoice AB · Stockholm, Sweden</span>
+        <span class="timeline-date">Jun 2025 — Present</span>
+      </div>
+      <div class="timeline-role">Software Engineer</div>
+      <ul class="timeline-points">
+        <li>Built an AI-powered social media post generator using Python, Flask, and OpenAI API, applying NLP and generative AI in production.</li>
+        <li>Collaborated on workflow automation, image selection logic, and production-grade AI integration pipelines.</li>
+        <li>Contributed to design and development of an AI-powered application with LLM integration deployed on Google Cloud Run.</li>
+      </ul>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-meta">
+        <span class="timeline-company">Wavenet Pvt Ltd · Colombo, Sri Lanka</span>
+        <span class="timeline-date">Jan 2023 — Jun 2025</span>
+      </div>
+      <div class="timeline-role">Senior Software Engineer</div>
+      <ul class="timeline-points">
+        <li>Served as Senior Key Backend Developer on the Compose low-code/no-code platform, driving architecture decisions and feature development.</li>
+        <li>Designed and built RESTful APIs using Java and Spring Boot, optimising systems for scalability and performance.</li>
+        <li>Led cloud migration to AWS and GCP using Docker and Kubernetes, improving deployment reliability.</li>
+        <li>Mentored junior developers on SOLID principles, design patterns, and code quality standards.</li>
+      </ul>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-meta">
+        <span class="timeline-company">Wavenet Pvt Ltd · Colombo, Sri Lanka</span>
+        <span class="timeline-date">Jun 2021 — Jan 2023</span>
+      </div>
+      <div class="timeline-role">Software Engineer</div>
+      <ul class="timeline-points">
+        <li>Built and maintained microservices using Java and Spring Boot for the Compose product and Prime Team.</li>
+        <li>Integrated message brokers (Kafka, RabbitMQ) for asynchronous event-driven processing.</li>
+        <li>Implemented RESTful APIs for internal and external telecom industry clients.</li>
+      </ul>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-meta">
+        <span class="timeline-company">Wavenet Pvt Ltd · Colombo, Sri Lanka</span>
+        <span class="timeline-date">Dec 2019 — Jun 2021</span>
+      </div>
+      <div class="timeline-role">Associate Software Engineer</div>
+      <ul class="timeline-points">
+        <li>Backend engineer on the TeleMobile service application for telecom providers.</li>
+        <li>Developed RESTful APIs, optimised database queries, and participated in Agile sprints.</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Key Projects</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="projects-grid">
+
+    <div class="project-card">
+      <div class="project-type">Master's Thesis · AI Application</div>
+      <div class="project-name">AI-Powered Menstrual Health Assistant</div>
+      <div class="project-desc">Slack-integrated AI assistant delivering personalised health insights to enhance workplace wellbeing. Built using GPT-4 and LangChain with DSR methodology, deployed on Google Cloud Run for scalability.</div>
+      <div class="project-stack">
+        <span class="stack-tag">GPT-4</span>
+        <span class="stack-tag">LangChain</span>
+        <span class="stack-tag">Python</span>
+        <span class="stack-tag">Google Cloud Run</span>
+        <span class="stack-tag">Slack API</span>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-type">Industry · Backend Platform</div>
+      <div class="project-name">Compose Service Creation Platform</div>
+      <div class="project-desc">Enterprise low-code/no-code platform serving telecom providers globally. Led backend microservices development, cloud migration to AWS/GCP, and performance optimisation with Redis caching.</div>
+      <div class="project-stack">
+        <span class="stack-tag">Java</span>
+        <span class="stack-tag">Spring Boot</span>
+        <span class="stack-tag">PostgreSQL</span>
+        <span class="stack-tag">Redis</span>
+        <span class="stack-tag">Docker</span>
+        <span class="stack-tag">Kubernetes</span>
+        <span class="stack-tag">AWS</span>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-type">Industry · AI Integration</div>
+      <div class="project-name">AI Social Media Post Generator</div>
+      <div class="project-desc">Production AI tool at Yoice AB for automating social media content creation with intelligent image selection and NLP-powered text generation.</div>
+      <div class="project-stack">
+        <span class="stack-tag">Python</span>
+        <span class="stack-tag">Flask</span>
+        <span class="stack-tag">OpenAI API</span>
+        <span class="stack-tag">GCP</span>
+        <span class="stack-tag">Applied NLP</span>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-type">Academic · IoT</div>
+      <div class="project-name">IoT Smart Mirror — Hospitality Industry</div>
+      <div class="project-desc">Final year project combining Raspberry Pi, image processing, and fuzzy logic for real-time personalisation in hospitality environments. Researched EDI information security gaps in Sri Lankan logistics.</div>
+      <div class="project-stack">
+        <span class="stack-tag">Raspberry Pi</span>
+        <span class="stack-tag">IoT</span>
+        <span class="stack-tag">Image Processing</span>
+        <span class="stack-tag">Fuzzy Logic</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- EDUCATION -->
+<section id="education">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <h2 class="section-title">Education</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="edu-grid">
+    <div class="edu-card">
+      <div class="edu-year">2023 – 2025</div>
+      <div>
+        <div class="edu-degree">MSc in Computer & Systems Science</div>
+        <div class="edu-school">Stockholm University · Sweden</div>
+        <div class="edu-note">Thesis: AI-Powered Menstrual Health Assistant — GPT-4, LangChain, DSR methodology, Google Cloud Run</div>
+      </div>
+    </div>
+    <div class="edu-card">
+      <div class="edu-year">2020 – 2021</div>
+      <div>
+        <div class="edu-degree">PG Diploma / Master's Coursework in Data Science</div>
+        <div class="edu-school">University of Peradeniya · Sri Lanka</div>
+      </div>
+    </div>
+    <div class="edu-card">
+      <div class="edu-year">2014 – 2019</div>
+      <div>
+        <div class="edu-degree">BSc (Joint Major) in Computer Science & Electronics</div>
+        <div class="edu-school">Wayamba University · Sri Lanka</div>
+        <div class="edu-note">IoT & Fuzzy Logic Smart Mirror | EDI Security Research</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-header" style="padding-top:2rem;">
+    <span class="section-num">06</span>
+    <h2 class="section-title">Languages</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="lang-row">
+    <div class="lang-pill">
+      <span class="lang-name">🇬🇧 English</span>
+      <span class="lang-level">Fluent</span>
+    </div>
+    <div class="lang-pill">
+      <span class="lang-name">🇸🇪 Swedish</span>
+      <span class="lang-level">Intermediate · SFI</span>
+    </div>
+    <div class="lang-pill">
+      <span class="lang-name">🇱🇰 Sinhala</span>
+      <span class="lang-level">Native</span>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- VOLUNTEERING -->
+<section id="volunteering">
+  <div class="section-header">
+    <span class="section-num">07</span>
+    <h2 class="section-title">Volunteering</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="vol-grid">
+
+    <div class="vol-card">
+      <div class="vol-header">
+        <div class="vol-icon">⚡</div>
+        <div>
+          <div class="vol-org">Women In Tech Sweden</div>
+          <div class="vol-role">Volunteer · Flying Team</div>
+          <div class="vol-date">Apr 2025 · Stockholm</div>
+        </div>
+      </div>
+      <p class="vol-desc">Part of the Flying Team at Women in Tech 2025 Stockholm, supporting participants and speakers across the event.</p>
+      <div class="vol-highlights">
+        <div class="vol-highlight">🏆 Won Code Challenge — Nordea Bank</div>
+        <div class="vol-highlight">🏆 Won Quiz — PyLadies Stockholm</div>
+        <div class="vol-highlight">🤝 Event coordination & leadership</div>
+        <div class="vol-highlight">🌍 International networking</div>
+      </div>
+    </div>
+
+    <div class="vol-card">
+      <div class="vol-header">
+        <div class="vol-icon">⚙</div>
+        <div>
+          <div class="vol-org">IEEE WIE Student Branch</div>
+          <div class="vol-role">Secretary</div>
+          <div class="vol-date">2017 · Wayamba University, Sri Lanka</div>
+        </div>
+      </div>
+      <p class="vol-desc">Led communication and coordination for the Women in Engineering branch, organising workshops, seminars, and outreach programs to inspire young women in STEM.</p>
+      <div class="vol-highlights">
+        <div class="vol-highlight">📋 Branch coordination & records management</div>
+        <div class="vol-highlight">🎓 STEM outreach to school students</div>
+        <div class="vol-highlight">♀ Gender diversity advocacy</div>
+      </div>
+    </div>
+
+    <div class="vol-card">
+      <div class="vol-header">
+        <div class="vol-icon">🚀</div>
+        <div>
+          <div class="vol-org">IEEE Innovation Nation Sri Lanka</div>
+          <div class="vol-role">Logistics Team Member</div>
+          <div class="vol-date">2018 · Sri Lanka</div>
+        </div>
+      </div>
+      <p class="vol-desc">Supported seamless execution of this innovation & entrepreneurship event through venue setup, transport logistics, and real-time problem solving.</p>
+      <div class="vol-highlights">
+        <div class="vol-highlight">📦 Venue & transport coordination</div>
+        <div class="vol-highlight">⚡ Real-time issue resolution</div>
+        <div class="vol-highlight">🤝 Cross-team collaboration</div>
+      </div>
+    </div>
+
+    <div class="vol-card">
+      <div class="vol-header">
+        <div class="vol-icon">📢</div>
+        <div>
+          <div class="vol-org">IEEE Techno Meetup</div>
+          <div class="vol-role">Publicity Team Member</div>
+          <div class="vol-date">2019 · Sri Lanka</div>
+        </div>
+      </div>
+      <p class="vol-desc">Developed and implemented strategic communication plans and event apps for industry conferences, managing content, schedules, and real-time attendee support.</p>
+      <div class="vol-highlights">
+        <div class="vol-highlight">📱 Event app development & management</div>
+        <div class="vol-highlight">📣 Strategic communications</div>
+        <div class="vol-highlight">🎯 Audience engagement</div>
+      </div>
+    </div>
+
+    <div class="vol-card">
+      <div class="vol-header">
+        <div class="vol-icon">💰</div>
+        <div>
+          <div class="vol-org">IEEE SLSYWC</div>
+          <div class="vol-role">Finance Team Member</div>
+          <div class="vol-date">2019 · Sri Lanka</div>
+        </div>
+      </div>
+      <p class="vol-desc">Managed budgeting, sponsorship fundraising, and financial reporting for the IEEE Sri Lanka Young Professionals & Women in Engineering Congress 2019.</p>
+      <div class="vol-highlights">
+        <div class="vol-highlight">📊 Budget management & reporting</div>
+        <div class="vol-highlight">🤝 Sponsorship acquisition</div>
+        <div class="vol-highlight">✅ Financial compliance</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-name">Piumi Suraweera</div>
+  <div class="footer-note">© 2025 · Stockholm, Sweden</div>
+  <div class="footer-links">
+    <a href="mailto:sapiumisuraweera@gmail.com">Email</a>
+    <a href="tel:+46734852210">Call</a>
+    <a href="https://linkedin.com/in/piumi-suraweera" target="_blank">LinkedIn</a>
+  </div>
+</footer>
+
+<script>
+  // Intersection Observer for scroll animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.timeline-item, .project-card').forEach(el => {
+    observer.observe(el);
+  });
+
+  // Staggered delays for project cards
+  document.querySelectorAll('.project-card').forEach((card, i) => {
+    card.style.transitionDelay = `${i * 0.1}s`;
+  });
+  document.querySelectorAll('.timeline-item').forEach((item, i) => {
+    item.style.transitionDelay = `${i * 0.1}s`;
+  });
+</script>
+
+<!-- FLOATING CV DOWNLOAD -->
+<a href="Piumi_Suraweera_CV.docx" download="Piumi_Suraweera_CV.docx" class="float-cv">
+  <span class="dl-icon">↓</span> Download CV
+</a>
+
+</body>
+</html>
